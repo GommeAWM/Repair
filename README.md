@@ -2,4 +2,5 @@
 Plugin for repair Tool/Armor | Minecraft Bedrock Edition | API 1.0.13
 
 # How the plugin work
-I upgrade the Repair plugin, a player need pay with experience, to repair his Item.
+A player need pay with experienceLevel, to repair his Item.
+All settings you can edit in Config.yml

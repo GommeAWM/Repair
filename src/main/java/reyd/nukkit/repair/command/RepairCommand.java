@@ -25,31 +25,46 @@ public class RepairCommand extends Command {
 
                 if (args.length == 1 && args[0].equals("all")){
 
+                    // contents
                     Map<Integer, Item> contents = player.getInventory().getContents();
 
+                    // Base
                     for (Map.Entry<Integer, Item> entry : contents.entrySet()){
+
                         Item item = entry.getValue();
-                        if(item.isTool() && item.isArmor()){
 
-                            int expLevel = player.getExperienceLevel();
-                            int exp = player.getExperience();
-                            int expForRepair = Repair.getRepairConfig().experienceForRepair();
-                            if(expLevel >= expForRepair){ // If player have ExperienceLevel
-                                int getExp = expLevel - expForRepair; // take ExperienceLevel for repair
-                                player.setExperience(exp, getExp);
-                                item.setDamage(0);
-                                player.getInventory().setItem(entry.getKey(), item);
-                                player.sendMessage(Repair.getRepairConfig().repair());
-                            } else {
+                        if(item.isTool() || item.isArmor()){
+
+                            if (item.getDamage() > 0){ // to repair only tools/armor with a low durability
+
+                                // Information experience
+                                int expLevel = player.getExperienceLevel();
+                                int exp = player.getExperience();
+                                int expForRepair = Repair.getRepairConfig().experienceForRepair();
+
+                                // Process to take experience after repair
+                                if(expLevel >= expForRepair){
+
+                                    int getExp = expLevel - expForRepair; // math
+                                    player.setExperience(exp, getExp);
+                                    item.setDamage(0);
+                                    player.getInventory().setItem(entry.getKey(), item);
+                                    player.sendMessage(Repair.getRepairConfig().repair());
+
+                                } else {
+
+                                    player.sendMessage(Repair.getRepairConfig().experience());
+                                    break;
+
+                                }
                             }
-
-
 
                         }
 
                     }
 
                 } else {
+
                     Item hand = player.getInventory().getItemInHand();
                     if(!hand.isTool() && !hand.isArmor()){
                         player.sendMessage(Repair.getRepairConfig().notToolorArmor());
